@@ -136,18 +136,25 @@ class Game:
                         for rr in range(r, 0, -1):
                             if self._field[rr][c] in chain:
                                 n += 1
-                            else: break
-                        for rrr in range(r, n, -1):
-                            self._field[rrr][c]._color = self._field[rrr-n][c].color
-                        for rrrr in range(n, 0, -1):
-                            col = rnd.randint(0, 2)
-                            for i in CellColor:
-                                if i.value == c:
-                                    self._field[rrrr][c]._color._color = i
+                        if n<r:
+                            for rrr in range(r, r-n, -1):
+                                self._field[rrr][c]._color = self._field[rrr-n][c].color
+                            for rrrr in range(n, 0, -1):
+                                col = rnd.randint(0, 2)
+                                for i in CellColor:
+                                    if i.value == c:
+                                        self._field[rrrr][c]._color._color = i
+                        else:
+                            for rrr in range(r, 0, -1):
+                                self._field[rrr][c]._color = self._field[rrr - n][c].color
+                            for rrrr in range(n, 0, -1):
+                                col = rnd.randint(0, 2)
+                                for i in CellColor:
+                                    if i.value == c:
+                                        self._field[rrrr][c]._color._color = i
             for i in chain:
                 i._state = CellState.ORDINARY
             self._chain = []
-
 
             return
         self._update_playing_state()
