@@ -21,6 +21,7 @@ class CellColor(Enum):
     BLUE = 2
     ANT = 3
     HOME = 4
+    WIN = 5
 
 class Cell:
     def __init__(self, x: int, y: int, state: CellState=CellState.ORDINARY,
@@ -46,6 +47,13 @@ class Cell:
     def y(self) -> int:
         return self._y
 
+    # def randomCellColor(self) -> CellColor:
+    #     c = rnd.randint(0, 2)
+    #     for i in CellColor:
+    #         if i.value == c:
+    #             color = i
+    #     return color
+
 
 class Game:
     def __init__(self, row_count: int, col_count: int, chain: list):
@@ -53,6 +61,7 @@ class Game:
         self._col_count = col_count
         self._chain = chain
         self.new_game()
+
 
     def new_game(self) -> None:
         self._field = [copy.deepcopy([Cell(r, c) for c in range(self.col_count)]) for r in range(self.row_count)]
@@ -96,6 +105,8 @@ class Game:
                 if (self._field[r][c].color == CellColor.ANT
                         and self._field[r-1][c].color == CellColor.HOME):
                     self._state = GameState.WIN
+                    for c in self._cells():
+                        c.state = CellState.WIN
         else:
             self._state = GameState.PLAYING
 
@@ -129,32 +140,47 @@ class Game:
     def confirmChain (self):
         chain = self._chain
         if len(chain)>=2:
-            for c in range(self._col_count-1, 0, -1):
-                n = 0
-                for r in range(self._row_count-1, 0, -1):
-                    if self._field[r][c] in chain:
-                        for rr in range(r, 0, -1):
-                            if self._field[rr][c] in chain:
-                                n += 1
-                        if n<r:
-                            for rrr in range(r, r-n, -1):
-                                self._field[rrr][c]._color = self._field[rrr-n][c].color
-                            for rrrr in range(n, 0, -1):
+            for r in range(self.row_count-1, 0, -1):
+                for c in range(self.col_count-1, 0, -1):
+
+                    cell = self._field[r][c]
+
+                    if cell in chain: # если шарик в выбранной цепочке
+                        inChainInThisCol = 1
+                        for i in range(r, 0, -1): # считаем количество шариков из цепочки в колонке
+                            if self._field[i][c] in chain:
+                                inChainInThisCol += 1
+                        print(inChainInThisCol)
+
+                        if inChainInThisCol < r+1: # случай, при котором шарики в колонке не доверху
+                            remainingCellsInThisCol = r + 1 - inChainInThisCol
+                            if remainingCellsInThisCol < inChainInThisCol:
+                                # меняем на что хватит оставшихся шариков
+                                for row in range(r, r-inChainInThisCol, -1):
+                                    self._field[row][c]._color = self._field[r-inChainInThisCol][c]._color
+                                # остальное в колонке - рандом
+                                for row in range(r-inChainInThisCol, 0, -1):
+                                    col = rnd.randint(0, 2)
+                                    for j in CellColor:
+                                        if j.value == c:
+                                            self._field[row][c]._color = j
+
+                            if remainingCellsInThisCol > inChainInThisCol:
+                                # меняем все цепочные шарики на оставшиеся
+                                print('fg')
+                                # верхние строчки по количеству цепочных шариков рандомим
+
+
+                        if inChainInThisCol == r+1: # случай, при котором шарики в колонке доверху
+                            for k in range(r, 0, -1): # меняем цвет каждого шарика на рандом
                                 col = rnd.randint(0, 2)
-                                for i in CellColor:
-                                    if i.value == c:
-                                        self._field[rrrr][c]._color._color = i
-                        else:
-                            for rrr in range(r, 0, -1):
-                                self._field[rrr][c]._color = self._field[rrr - n][c].color
-                            for rrrr in range(n, 0, -1):
-                                col = rnd.randint(0, 2)
-                                for i in CellColor:
-                                    if i.value == c:
-                                        self._field[rrrr][c]._color._color = i
+                                for j in CellColor:
+                                    if j.value == c:
+                                        self._field[k][c]._color = j
+
             for i in chain:
-                i._state = CellState.ORDINARY
-            self._chain = []
+                i._state = CellState.ORDINARY # отменяем выделение цепочки
+            self._chain = [] # очищаем цепочку
 
             return
         self._update_playing_state()
