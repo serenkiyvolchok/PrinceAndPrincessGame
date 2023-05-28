@@ -139,51 +139,67 @@ class Game:
 
     def confirmChain (self):
         chain = self._chain
+        print("Новая цепочка")
         if len(chain)>=2:
-            for r in range(self.row_count-1, 0, -1):
-                for c in range(self.col_count-1, 0, -1):
+            for c in range(self.col_count):
+                for r in range(self.row_count):
 
                     cell = self._field[r][c]
 
                     if cell in chain: # если шарик в выбранной цепочке
-                        inChainInThisCol = 1
-                        for i in range(r, 0, -1): # считаем количество шариков из цепочки в колонке
+
+                        inChainInThisCol = 0
+                        for i in range(self.row_count): # считаем количество шариков из цепочки в колонке
                             if self._field[i][c] in chain:
                                 inChainInThisCol += 1
-                        print(inChainInThisCol)
 
-                        if inChainInThisCol < r+1: # случай, при котором шарики в колонке не доверху
+                        # если цепочные шарики в колонке не доверху
+                        if inChainInThisCol < r+1:
                             remainingCellsInThisCol = r + 1 - inChainInThisCol
+                            # если сверху меньше шариков, чем цепочных
                             if remainingCellsInThisCol < inChainInThisCol:
-                                # меняем на что хватит оставшихся шариков
-                                for row in range(r, r-inChainInThisCol, -1):
+                                # меняем на что хватит верхних шариков
+                                for row in range(r-inChainInThisCol+1, r+1):
                                     self._field[row][c]._color = self._field[row-inChainInThisCol][c]._color
+                                    print("Шарики не доверху. Цепочных больше, чем остатка."
+                                          "Шарику в клетке", row, c, "присвоен цвет",
+                                          self._field[row+inChainInThisCol][c]._color,
+                                          "из клетки", row-inChainInThisCol, c)
                                 # остальное в колонке - рандом
-                                for row in range(r-inChainInThisCol, 0, -1):
-                                    print("rrrrrrrr")
+                                for row in range(r-inChainInThisCol+1):
                                     col = rnd.randint(0, 2)
                                     for j in CellColor:
                                         if j.value == col:
                                             self._field[row][c]._color = j
-
-                            if remainingCellsInThisCol > inChainInThisCol:
-                                # меняем все цепочные шарики на оставшиеся
-                                for row in range(r, r - inChainInThisCol, -1):
-                                    self._field[row][c]._color = self._field[row - inChainInThisCol][c]._color
-                                # верхние строчки по количеству цепочных шариков рандомим
-                                for row in range(inChainInThisCol):
+                                            print("Шарики не доверху. ЦепБольшЧемОст. Шарику в клетке",
+                                                  row, c, "присвоен рандомный цвет", j)
+                            # если шариков сверху хватит, чтобы покрыть цепочные шарики
+                            if remainingCellsInThisCol >= inChainInThisCol:
+                                # меняем все цепочные шарики на верхние
+                                for row in range(r - inChainInThisCol+1, r+1):
+                                    self._field[row][c]._color = self._field[row-inChainInThisCol][c]._color
+                                    print("Шарики не доверху. ЦепМеньшеЧемОст. Шарику в клетке",
+                                          row, c, "присвоен цвет", self._field[row-inChainInThisCol][c]._color)
+                                # верхние клетки по количеству цепочных шариков рандомим
+                                for rows in range(r - inChainInThisCol+1):
                                     col = rnd.randint(0, 2)
                                     for j in CellColor:
                                         if j.value == col:
-                                            self._field[row][c]._color = j
+                                            self._field[rows][c]._color = j
+                                            print("Шарики не доверху. ЦепМеньшеЧемОст.Шарику в клетке",
+                                                  rows, c, "присвоен рандомный цвет", j)
 
-
-                        if inChainInThisCol == r+1: # случай, при котором шарики в колонке доверху
-                            for k in range(r, 0, -1): # меняем цвет каждого шарика на рандом
+                        # если цепочные шарики в колонке доверху
+                        if inChainInThisCol == r+1:
+                            if r == 0:
+                                rr = 1
+                            else: rr = r+1
+                            for k in range(rr): # меняем цвет каждого шарика на рандом
                                 col = rnd.randint(0, 2)
                                 for j in CellColor:
-                                    if j.value == c:
+                                    if j.value == col:
                                         self._field[k][c]._color = j
+                                        print("Шарики доверху. Шарику в клетке", k, c, "присвоен рандомный цвет", j)
 
             for i in chain:
                 i._state = CellState.ORDINARY # отменяем выделение цепочки
