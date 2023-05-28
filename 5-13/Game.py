@@ -157,18 +157,25 @@ class Game:
                             if remainingCellsInThisCol < inChainInThisCol:
                                 # меняем на что хватит оставшихся шариков
                                 for row in range(r, r-inChainInThisCol, -1):
-                                    self._field[row][c]._color = self._field[r-inChainInThisCol][c]._color
+                                    self._field[row][c]._color = self._field[row-inChainInThisCol][c]._color
                                 # остальное в колонке - рандом
                                 for row in range(r-inChainInThisCol, 0, -1):
+                                    print("rrrrrrrr")
                                     col = rnd.randint(0, 2)
                                     for j in CellColor:
-                                        if j.value == c:
+                                        if j.value == col:
                                             self._field[row][c]._color = j
 
                             if remainingCellsInThisCol > inChainInThisCol:
                                 # меняем все цепочные шарики на оставшиеся
-                                print('fg')
+                                for row in range(r, r - inChainInThisCol, -1):
+                                    self._field[row][c]._color = self._field[row - inChainInThisCol][c]._color
                                 # верхние строчки по количеству цепочных шариков рандомим
+                                for row in range(inChainInThisCol):
+                                    col = rnd.randint(0, 2)
+                                    for j in CellColor:
+                                        if j.value == col:
+                                            self._field[row][c]._color = j
 
 
                         if inChainInThisCol == r+1: # случай, при котором шарики в колонке доверху
