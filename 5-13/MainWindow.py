@@ -78,7 +78,7 @@ class MainWindow(QMainWindow, MainWindowUI):
             img = self._images['green1']
         elif item.state == CellState.ORDINARY and item.color==CellColor.GREEN:
             img = self._images['green']
-        else:
+        elif item.state == CellState.WIN:
             img = self._images['win']
         img.render(painter, QRectF(option.rect))
 

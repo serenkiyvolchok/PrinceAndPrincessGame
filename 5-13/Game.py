@@ -21,7 +21,6 @@ class CellColor(Enum):
     BLUE = 2
     ANT = 3
     HOME = 4
-    WIN = 5
 
 class Cell:
     def __init__(self, x: int, y: int, state: CellState=CellState.ORDINARY,
@@ -103,7 +102,7 @@ class Game:
         for r in range(self.row_count-1):
             for c in range(self.col_count-1):
                 if (self._field[r][c].color == CellColor.ANT
-                        and self._field[r-1][c].color == CellColor.HOME):
+                        and self._field[r+1][c].color == CellColor.HOME):
                     self._state = GameState.WIN
                     for c in self._cells():
                         c.state = CellState.WIN
