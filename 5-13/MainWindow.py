@@ -20,7 +20,7 @@ class MainWindow(QMainWindow, MainWindowUI):
             for f in os.listdir(images_dir)
         }
 
-        self._game = Game(10, 10, [])
+        self._game = Game(10, 10, [], 0)
         self.game_resize(self._game)
 
         class MyDelegate(QItemDelegate):
@@ -41,7 +41,7 @@ class MainWindow(QMainWindow, MainWindowUI):
 
         self.gameFieldTableView.mousePressEvent = new_mouse_press_event
 
-        self.newGamePushButton.clicked.connect(self.on_confirm_chain)
+        self.confirmChainPushButton.clicked.connect(self.on_confirm_chain)
 
     def game_resize(self, game: Game) -> None:
         model = QStandardItemModel(game.row_count, game.col_count)
