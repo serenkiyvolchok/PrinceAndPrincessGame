@@ -16,11 +16,12 @@ class CellState(Enum):
 
 
 class CellColor(Enum):
-    YELLOW = 0
-    GREEN = 1
-    BLUE = 2
-    ANT = 3
-    HOME = 4
+    RED = 0
+    YELLOW = 1
+    GREEN = 2
+    BLUE = 3
+    ANT = 4
+    HOME = 5
 
 
 class Cell:
@@ -47,14 +48,6 @@ class Cell:
     def y(self) -> int:
         return self._y
 
-    # def randomCellColor(self) -> CellColor:
-    #     c = rnd.randint(0, 2)
-    #     for i in CellColor:
-    #         if i.value == c:
-    #             color = i
-    #     return color
-
-
 class Game:
     def __init__(self, row_count: int, col_count: int, chain: list, score: int):
         self._row_count = row_count
@@ -66,9 +59,10 @@ class Game:
 
     def new_game(self) -> None:
         self._field = [copy.deepcopy([Cell(r, c) for c in range(self.col_count)]) for r in range(self.row_count)]
-
+        startNum = 0
+        finNum = 2
         for cell in self._cells():
-            cell._color = CellColor(rnd.randint(0, 2))
+            cell._color = CellColor(rnd.randint(startNum, finNum))
 
         r = rnd.randint(0, self.row_count-5)
         c = rnd.randint(0, self.col_count-1)
@@ -100,11 +94,11 @@ class Game:
     def _update_playing_state(self):
         for r in range(self.row_count):
             for c in range(self.col_count):
-                if (self._field[r][c].color == CellColor.ANT
-                        and self._field[r+1][c].color == CellColor.HOME):
-                    self._state = GameState.WIN
-                    for cell in self._cells():
-                        cell._state = CellState.WIN
+                if self._field[r][c].color == CellColor.ANT:
+                    if self._field[r+1][c].color == CellColor.HOME:
+                        self._state = GameState.WIN
+                        for cell in self._cells():
+                            cell._state = CellState.WIN
         else:
             self._state = GameState.PLAYING
 
@@ -136,6 +130,8 @@ class Game:
         self._update_playing_state()
 
     def confirmChain (self):
+        startNum = 0
+        finNum = 3
         chain = self._chain
         print("Новая цепочка")
         if len(chain) > 2:
@@ -146,7 +142,7 @@ class Game:
                         last = 0
                         for i in range(r, 0, -1):
                             self._field[i][c]._color = self._field[i-1][c]._color
-                            color = CellColor(rnd.randint(0, 2))
+                            color = CellColor(rnd.randint(startNum, finNum))
                             self._field[last][c]._color = color
             self._score += len(chain)
             for i in chain:
