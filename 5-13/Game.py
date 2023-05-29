@@ -49,25 +49,25 @@ class Cell:
         return self._y
 
 class Game:
-    def __init__(self, row_count: int, col_count: int, chain: list, score: int):
+    def __init__(self, row_count: int, col_count: int, chain: list, score: int, level: int):
         self._row_count = row_count
         self._col_count = col_count
         self._chain = chain
         self._score = score
+        self._level = level
         self.new_game()
 
 
     def new_game(self) -> None:
+        self._score = 0
         self._field = [copy.deepcopy([Cell(r, c) for c in range(self.col_count)]) for r in range(self.row_count)]
-        startNum = 0
-        finNum = 2
         for cell in self._cells():
-            cell._color = CellColor(rnd.randint(startNum, finNum))
+            cell._color = CellColor(rnd.randint(0, self.finNum))
 
         r = rnd.randint(0, self.row_count-5)
         c = rnd.randint(0, self.col_count-1)
         self._field[r][c]._color = CellColor.ANT
-        self._field[r+4][c]._color = CellColor.HOME
+        self._field[r+self.distance][c]._color = CellColor.HOME
 
         self._state = GameState.PLAYING
 
@@ -90,6 +90,20 @@ class Game:
     @property
     def score(self) -> int:
         return self._score
+    @property
+    def level(self) -> int:
+        return self._level
+    @property
+    def finNum(self) -> int:
+        if self.level == 1:
+            return 2
+        else: return 3
+
+    @property
+    def distance(self) -> int:
+        if self.level == 1:
+            return 4
+        else: return 6
 
     def __getitem__(self, indices: tuple) -> Cell:
         return self._field[indices[0]][indices[1]]
@@ -138,8 +152,6 @@ class Game:
         self._update_playing_state()
 
     def confirmChain (self):
-        startNum = 0
-        finNum = 2
         chain = self._chain
         if len(chain) > 2:
             for r in range(self.row_count):
@@ -149,7 +161,7 @@ class Game:
                         last = 0
                         for i in range(r, 0, -1):
                             self._field[i][c]._color = self._field[i-1][c]._color
-                            color = CellColor(rnd.randint(startNum, finNum))
+                            color = CellColor(rnd.randint(0, self.finNum))
                             self._field[last][c]._color = color
             self._score += len(chain)
             for i in chain:

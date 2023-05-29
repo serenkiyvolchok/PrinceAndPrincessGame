@@ -20,7 +20,7 @@ class MainWindow(QMainWindow, MainWindowUI):
             for f in os.listdir(images_dir)
         }
 
-        self._game = Game(10, 10, [], self.levelSpinBox.value())
+        self._game = Game(10, 10, [], 0, self.levelSpinBox.value())
         self.game_resize(self._game)
 
         class MyDelegate(QItemDelegate):
@@ -54,7 +54,8 @@ class MainWindow(QMainWindow, MainWindowUI):
         self.gameFieldTableView.viewport().update()
 
     def on_new_game(self):
-        self._game = Game(self._game.row_count, self._game.col_count, self._game.chain, self._game.score)
+        self._game = Game(self._game.row_count, self._game.col_count,
+                          [], 0, self.levelSpinBox.value())
         self.game_resize(self._game)
         self.update_view()
 

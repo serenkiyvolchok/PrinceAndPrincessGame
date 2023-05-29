@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>560</width>
-    <height>538</height>
+    <width>550</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -176,6 +176,32 @@
        <attribute name="verticalHeaderVisible">
         <bool>false</bool>
        </attribute>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>510</y>
+      <width>914</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="descriptionLabel">
+       <property name="font">
+        <font>
+         <family>Montserrat Black</family>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:6pt;&quot;&gt;Помоги муравью добраться домой! Выбери уровень в окошке&lt;br/&gt;сверху и нажми &amp;quot;Новая игра&amp;quot;. Составляй цепочки, &lt;br/&gt;чтобы препятствия исчезли. Когда муравей и дом окажутся &lt;br/&gt;на соседних клетках, нажми сначала на муравья, а потом на домик.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
       </widget>
      </item>
     </layout>
