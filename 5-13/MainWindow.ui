@@ -36,6 +36,13 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
+        <widget class="QLCDNumber" name="scorelcdNumber">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="newGamePushButton">
          <property name="font">
           <font>
@@ -63,10 +70,94 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QSpinBox" name="levelSpinBox">
+         <property name="font">
+          <font>
+           <family>Montserrat Black</family>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
       <widget class="QTableView" name="gameFieldTableView">
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>235</red>
+             <green>235</green>
+             <blue>235</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="PlaceholderText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="128">
+             <red>207</red>
+             <green>207</green>
+             <blue>207</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>235</red>
+             <green>235</green>
+             <blue>235</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="PlaceholderText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="128">
+             <red>207</red>
+             <green>207</green>
+             <blue>207</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>240</red>
+             <green>240</green>
+             <blue>240</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="PlaceholderText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="128">
+             <red>207</red>
+             <green>207</green>
+             <blue>207</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
        <property name="styleSheet">
         <string notr="true">QTableView { gridline-color: green; }</string>
        </property>
@@ -89,26 +180,6 @@
      </item>
     </layout>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>560</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>Игра</string>
-    </property>
-    <addaction name="action"/>
-    <addaction name="action_2"/>
-    <addaction name="separator"/>
-    <addaction name="action_5"/>
-   </widget>
-   <addaction name="menu"/>
   </widget>
   <action name="action">
    <property name="text">

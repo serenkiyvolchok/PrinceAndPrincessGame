@@ -20,7 +20,7 @@ class MainWindow(QMainWindow, MainWindowUI):
             for f in os.listdir(images_dir)
         }
 
-        self._game = Game(10, 10, [], 0)
+        self._game = Game(10, 10, [], self.levelSpinBox.value())
         self.game_resize(self._game)
 
         class MyDelegate(QItemDelegate):
@@ -41,7 +41,8 @@ class MainWindow(QMainWindow, MainWindowUI):
 
         self.gameFieldTableView.mousePressEvent = new_mouse_press_event
 
-        self.confirmChainPushButton.clicked.connect(self.on_confirm_chain)
+        self.confirmChainButton.clicked.connect(self.on_confirm_chain)
+        self.newGamePushButton.clicked.connect(self.on_new_game)
 
     def game_resize(self, game: Game) -> None:
         model = QStandardItemModel(game.row_count, game.col_count)
@@ -49,10 +50,11 @@ class MainWindow(QMainWindow, MainWindowUI):
         self.update_view()
 
     def update_view(self):
+        self.scorelcdNumber.display(self._game.score)
         self.gameFieldTableView.viewport().update()
 
     def on_new_game(self):
-        self._game = Game(self._game.row_count, self._game.col_count, self._game.mine_count)
+        self._game = Game(self._game.row_count, self._game.col_count, self._game.chain, self._game.score)
         self.game_resize(self._game)
         self.update_view()
 

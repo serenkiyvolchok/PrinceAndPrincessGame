@@ -16,10 +16,10 @@ class CellState(Enum):
 
 
 class CellColor(Enum):
-    RED = 0
+    BLUE = 0
     YELLOW = 1
     GREEN = 2
-    BLUE = 3
+    RED = 3
     ANT = 4
     HOME = 5
 
@@ -83,6 +83,14 @@ class Game:
     def state(self) -> GameState:
         return self._state
 
+    @property
+    def chain(self) -> list:
+        return self._chain
+
+    @property
+    def score(self) -> int:
+        return self._score
+
     def __getitem__(self, indices: tuple) -> Cell:
         return self._field[indices[0]][indices[1]]
 
@@ -131,9 +139,8 @@ class Game:
 
     def confirmChain (self):
         startNum = 0
-        finNum = 3
+        finNum = 2
         chain = self._chain
-        print("Новая цепочка")
         if len(chain) > 2:
             for r in range(self.row_count):
                 for c in range(self.col_count):
@@ -148,7 +155,6 @@ class Game:
             for i in chain:
                 i._state = CellState.ORDINARY # отменяем выделение цепочки
             self._chain = [] # очищаем цепочку
-            print(self.state)
             return
         self._update_playing_state()
 
